@@ -1,0 +1,89 @@
+/******************************************************************************
+
+                            Online Java Compiler.
+                Code, Compile, Run and Debug java program online.
+Write your code in this editor and press "Run" button to execute it.
+
+*******************************************************************************/
+import java.util.*;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+public class Main
+{
+	public static void main(String[] args) {
+	    Scanner sc=new Scanner(System.in);
+		int l,p,q,n,h,X,m,k,temp,temp1,i,kinv=0,w=0;
+		BigInteger K1,K2,g,Y,rt,r,Ki,M,x,stemp,s,W,U1,U2,Vtemp,v;
+		System.out.println("***** WELCOME TO DSS ALGORITHM *****");
+		System.out.println();
+		System.out.println("Enter the value of l:");
+		l=sc.nextInt();
+		System.out.println("Enter the value of p such that it is prime:");
+		p=sc.nextInt();
+		System.out.println("Enter the value of q such that it is a prime divisor of p:");
+        q=sc.nextInt();		
+		System.out.println("Enter the value of n:");
+		n=sc.nextInt();
+		System.out.println("Enter the value of h:");
+		h=sc.nextInt();
+		K1=BigInteger.valueOf(p);
+		K2=BigInteger.valueOf(q);
+		
+		System.out.println("\nCOMPUTING THE VALUE OF g...\n");
+		temp=(p-1)/q;
+		BigInteger H=BigInteger.valueOf(h);
+		g=(H.pow(temp)).mod(K1);
+		System.out.println("The value of g is: "+g);
+		
+		System.out.println("\nGETTING USER'S PRIVATE KEY X...\n");
+		System.out.println("Enter the value of user's private key X:");
+		X=sc.nextInt();
+		Y=(g.pow(X)).mod(K1);
+		System.out.println("The value of Y is: "+Y);
+		
+		System.out.println("\nSIGNING IS PERFORMED...\n");
+		System.out.println("Enter the value of m:");
+		m=sc.nextInt();
+		System.out.println("Enter the value of k:");
+		k=sc.nextInt();
+		rt=(g.pow(k)).mod(K1);
+		r=rt.mod(K2);
+		for(i=0;i<Integer.MAX_VALUE;i++){
+		    if((k*i)%q==1){
+		        kinv=i;
+		        break;
+		    }
+		}
+		Ki=BigInteger.valueOf(kinv);
+		x=BigInteger.valueOf(X);
+		M=BigInteger.valueOf(m);
+		stemp=(M.add((x.multiply(r))));
+		s=(Ki.multiply(stemp)).mod(K2);
+		System.out.println("Sign = ( "+r+","+s+" )");
+		
+		System.out.println("\nVERIFICATION OF PROCESS...\n");
+		for(i=0;i<Integer.MAX_VALUE;i++){
+		    if(((s.intValueExact())*i)%q==1){
+		        w=i;
+		        break;
+		    }
+		}
+		W=BigInteger.valueOf(w);
+		System.out.println("The value of w is: "+W);
+		U1=(M.multiply(W)).mod(K2);
+		U2=(r.multiply(W)).mod(K2);
+		System.out.println("The value of U1 is: "+U1);
+		System.out.println("The value of U2 is: "+U2);
+		
+		Vtemp=((g.pow(U1.intValueExact())).multiply((Y.pow(U2.intValueExact())))).mod(K1);
+		v=Vtemp.mod(K2);
+		System.out.println("The value of v is: "+v);
+		
+		if(v.equals(r)){
+		    System.out.println("No tampering has occurred..Our data is safe!");
+		}
+		else{
+		    System.out.println("Tampering has occurred in our data!");
+		}
+	}
+}
